@@ -46,11 +46,6 @@ private:
 	void triple_work_main();
 	void quad_work_main();
 	void penta_work_main();
-	void hexa_work_main();
-	void hepta_work_main();
-	void octa_work_main();
-	void nona_work_main();
-	void deca_work_main();
 
 	uint64_t iJobNo;
 
