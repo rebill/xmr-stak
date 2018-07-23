@@ -119,6 +119,21 @@ minethd::minethd(miner_work& pWork, size_t iNo, int iMultiway, bool no_prefetch,
 
 	switch (iMultiway)
 	{
+	case 10:
+		oWorkThd = std::thread(&minethd::deca_work_main, this);
+		break;
+	case 9:
+		oWorkThd = std::thread(&minethd::nona_work_main, this);
+		break;
+	case 8:
+		oWorkThd = std::thread(&minethd::octa_work_main, this);
+		break;
+	case 7:
+		oWorkThd = std::thread(&minethd::hepta_work_main, this);
+		break;
+	case 6:
+		oWorkThd = std::thread(&minethd::hexa_work_main, this);
+		break;				
 	case 5:
 		oWorkThd = std::thread(&minethd::penta_work_main, this);
 		break;
@@ -764,6 +779,31 @@ void minethd::quad_work_main()
 void minethd::penta_work_main()
 {
 	multiway_work_main<5u>();
+}
+
+void minethd::hexa_work_main()
+{
+	multiway_work_main<6u>();
+}
+
+void minethd::hepta_work_main()
+{
+	multiway_work_main<7u>();
+}
+
+void minethd::octa_work_main()
+{
+	multiway_work_main<8u>();
+}
+
+void minethd::nona_work_main()
+{
+	multiway_work_main<9u>();
+}
+
+void minethd::deca_work_main()
+{
+	multiway_work_main<10u>();
 }
 
 template<size_t N>
