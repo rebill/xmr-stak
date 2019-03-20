@@ -84,10 +84,11 @@ if(CUDA_ENABLE)
             /usr
             /usr/local/cuda
         PATH_SUFFIXES
-            lib64	
+            lib64
             lib/x64
             lib/Win32
-            lib64/stubs)
+            lib64/stubs
+            lib)
 
         #nvrtc
         find_library(CUDA_NVRTC_LIB 
@@ -104,7 +105,8 @@ if(CUDA_ENABLE)
         PATH_SUFFIXES
             lib64
             lib/x64
-            lib/Win32)
+            lib/Win32
+            lib)
 
         list(APPEND BACKEND_TYPES "nvidia")
         option(XMR-STAK_LARGEGRID "Support large CUDA block count > 128" ON)
@@ -322,7 +324,7 @@ endif()
 ################################################################################
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-	set_source_files_properties(xmrstak/backend/cpu/crypto/cn_gpu_avx.cpp PROPERTIES COMPILE_FLAGS "-mavx2")
+    set_source_files_properties(xmrstak/backend/cpu/crypto/cn_gpu_avx.cpp PROPERTIES COMPILE_FLAGS "-mavx2")
 endif()
 
 ################################################################################
@@ -508,18 +510,23 @@ if(CMAKE_C_COMPILER_ID MATCHES "MSVC")
     # asm optimized monero v8 code
     enable_language(ASM_MASM)
     set_property(SOURCE "xmrstak/backend/cpu/crypto/asm/cryptonight_v8_main_loop.asm" PROPERTY ASM_MASM)
+    set_property(SOURCE "xmrstak/backend/cpu/crypto/asm/cnR/CryptonightR_template.asm" PROPERTY ASM_MASM)
     add_library(xmr-stak-asm
         STATIC
         "xmrstak/backend/cpu/crypto/asm/cryptonight_v8_main_loop.asm"
+        "xmrstak/backend/cpu/crypto/asm/cnR/CryptonightR_template.asm"
     )
 else()
     # asm optimized monero v8 code
     enable_language(ASM)
     set_property(SOURCE "xmrstak/backend/cpu/crypto/asm/cryptonight_v8_main_loop.S" PROPERTY CPP)
+    set_property(SOURCE "xmrstak/backend/cpu/crypto/asm/cnR/CryptonightR_template.S" PROPERTY CPP)
     set_source_files_properties("xmrstak/backend/cpu/crypto/asm/cryptonight_v8_main_loop.S" PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
+    set_source_files_properties("xmrstak/backend/cpu/crypto/asm/cnR/CryptonightR_template.S" PROPERTIES COMPILE_FLAGS "-x assembler-with-cpp")
     add_library(xmr-stak-asm
         STATIC
         "xmrstak/backend/cpu/crypto/asm/cryptonight_v8_main_loop.S"
+        "xmrstak/backend/cpu/crypto/asm/cnR/CryptonightR_template.S"
     )
 endif()
 
